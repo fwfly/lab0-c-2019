@@ -18,6 +18,8 @@
 #include "harness.h"
 #include "queue.h"
 
+static int s_queue_len = 0;
+
 /*
   Create empty queue.
   Return NULL if could not allocate space.
@@ -38,6 +40,7 @@ void q_free(queue_t *q)
         ;
     }
     /* Free queue structure */
+    s_queue_len = 0;
     free(q);
 }
 
@@ -70,6 +73,7 @@ bool q_insert_head(queue_t *q, char *s)
 
     newh->next = q->head;
     q->head = newh;
+    s_queue_len++;
     return true;
 }
 
@@ -114,7 +118,7 @@ bool q_remove_head(queue_t *q, char *sp, size_t bufsize)
     }
 
     q->head = q->head->next;
-
+    s_queue_len--;
     /* free string and list */
     free(rmi->value);
     free(rmi);
@@ -130,7 +134,7 @@ int q_size(queue_t *q)
 {
     /* You need to write the code for this function */
     /* Remember: It should operate in O(1) time */
-    return 0;
+    return s_queue_len;
 }
 
 /*
