@@ -134,6 +134,9 @@ bool q_insert_tail(queue_t *q, char *s)
 */
 bool q_remove_head(queue_t *q, char *sp, size_t bufsize)
 {
+    if (!q)
+        return false;
+
     /* You need to fix up this code. */
     list_ele_t *rmi = q->head;
 
