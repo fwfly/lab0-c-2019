@@ -35,12 +35,14 @@ queue_t *q_new()
 /* Free all storage used by queue */
 void q_free(queue_t *q)
 {
-    while (q_remove_head(q, NULL, 0)) {
-        /* How about freeing the list elements and the strings? */
-        ;
+    if (q) {
+        while (q_remove_head(q, NULL, 0)) {
+            /* How about freeing the list elements and the strings? */
+            ;
+        }
+        /* Free queue structure */
+        free(q);
     }
-    /* Free queue structure */
-    free(q);
 }
 
 /*
@@ -65,6 +67,12 @@ bool q_insert_head(queue_t *q, char *s)
     len = strlen(s) + 1;
     char *newstr;
     newstr = malloc(sizeof(char) * len);
+
+    if (!newstr) {
+        free(newh);
+        return false;
+    }
+
     strncpy(newstr, s, len);
     newh->value = newstr;
 
@@ -136,7 +144,11 @@ bool q_remove_head(queue_t *q, char *sp, size_t bufsize)
 
     /* copy value to sp */
     if (sp) {
-        int len = strlen(rmi->value);
+        size_t len = strlen(rmi->value);
+
+        /* buf can be modified. If bufsize lt len, use buf  */
+        if (len > bufsize)
+            len = bufsize - 1;
         strncpy(sp, rmi->value, len);
         sp[len] = '\0';
     }
