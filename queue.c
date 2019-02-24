@@ -64,6 +64,8 @@ bool q_insert_head(queue_t *q, char *s)
         return false;
 
     newh = malloc(sizeof(list_ele_t));
+    if (!newh)
+        return false;
     newh->next = NULL;
 
     /* Don't forget to allocate space for the string and copy it */
@@ -108,6 +110,8 @@ bool q_insert_tail(queue_t *q, char *s)
 
     list_ele_t *newt;
     newt = malloc(sizeof(list_ele_t));
+    if (!newt)
+        return false;
     newt->next = NULL;
 
     /* Don't forget to allocate space for the string and copy it */
@@ -115,6 +119,12 @@ bool q_insert_tail(queue_t *q, char *s)
     len = strlen(s) + 1;
     char *newstr;
     newstr = malloc(sizeof(char) * len);
+
+    if (!newstr) {
+        free(newt);
+        return false;
+    }
+
     strncpy(newstr, s, len);
     newt->value = newstr;
 
